@@ -1,0 +1,19 @@
+Fri Mar 30 15:04:37.165684 2018] [:error] [pid 82231] [client ::1:53608] ["::1","\\/"]
+[Fri Mar 30 15:04:39.515768 2018] [:error] [pid 82231] [client ::1:53608] ["::1","\\/about"]
+[Fri Mar 30 15:04:42.701275 2018] [:error] [pid 82231] [client ::1:53608] ["::1","\\/"]
+[Fri Mar 30 15:04:44.653784 2018] [:error] [pid 82231] [client ::1:53608] ["::1","\\/user\\/login"], referer: http://testapp.localhost/
+[Fri Mar 30 15:04:52.124285 2018] [:error] [pid 82233] [client ::1:53617] ["::1","\\/user\\/login"], referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:04:52.148765 2018] [:error] [pid 82233] [client ::1:53617] {"username":"admin","password":"admin"}, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:04:52.150128 2018] [:error] [pid 82233] [client ::1:53617] fail, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:04:56.788773 2018] [:error] [pid 82233] [client ::1:53617] ["::1","\\/user\\/login"], referer: http://testapp.localhost/
+[Fri Mar 30 15:04:58.460450 2018] [:error] [pid 82233] [client ::1:53617] ["::1","\\/user\\/forgot"], referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:03.305490 2018] [:error] [pid 82233] [client ::1:53617] ["::1","\\/user\\/login"]
+[Fri Mar 30 15:05:33.334374 2018] [:error] [pid 82246] [client ::1:53633] ["::1","\\/user\\/login"], referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:33.355774 2018] [:error] [pid 82246] [client ::1:53633] {"username":"ccornutt","password":"test1234"}, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:33.365330 2018] [:error] [pid 82246] [client ::1:53633] fail, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:37.507007 2018] [:error] [pid 82246] [client ::1:53633] ["::1","\\/user\\/login"]
+[Fri Mar 30 15:05:46.006131 2018] [:error] [pid 82231] [client ::1:53635] ["::1","\\/user\\/login"], referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:46.022319 2018] [:error] [pid 82231] [client ::1:53635] {"username":"admin","password":"3l33t"}, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:46.022817 2018] [:error] [pid 82231] [client ::1:53635] success, referer: http://testapp.localhost/user/login
+[Fri Mar 30 15:05:55.766956 2018] [:error] [pid 82232] [client ::1:53642] ["::1","\\/"]
+[Fri Mar 30 15:05:59.424153 2018] [:error] [pid 82232] [client ::1:53642] ["::1","\\/about"]
