@@ -15,3 +15,4 @@ COPY /var/www/html/phinx.yml-prod /var/www/html/phinx.yml
 
 WORKDIR /var/www/html
 RUN vendor/bin/phinx migrate
+RUN vendor/bin/phinx seed:run
