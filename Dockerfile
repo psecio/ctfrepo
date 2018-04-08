@@ -8,3 +8,10 @@ COPY . /var/www/html
 COPY ./000-default.conf /etc/apache2/sites-enabled/000-default.conf
 
 RUN /usr/sbin/apachectl restart
+
+# App-specific
+COPY /var/www/html/.env-prod /var/www/html/.env
+COPY /var/www/html/phinx.yml-prod /var/www/html/phinx.yml
+
+WORKDIR /var/www/html
+RUN vendor/bin/phinx migrate
