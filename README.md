@@ -26,7 +26,6 @@ or you can set up your favorite web server and use the `public/` directory as th
 
 ```
 DO_TOKEN=[your Digital Ocean token]
-
 ```
 
 ## Deploying to Digital Ocean
