@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
 COPY . /var/www/html
-RUN chmod +x migrate.sh
+RUN chmod +x /var/www/html/migrate.sh
 
 # App-specific
 COPY ./.env-prod /var/www/html/.env

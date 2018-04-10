@@ -29,7 +29,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/cmd/Dockerfile
-    command: ./migrate.sh
+    command: /var/www/html/migrate.sh
     depends_on:
       mysql:
         condition: service_healthy
