@@ -7,6 +7,9 @@ use DigitalOceanV2\Adapter\BuzzAdapter;
 use DigitalOceanV2\DigitalOceanV2;
 use Mailgun\Mailgun;
 
+$start = time();
+echo "\nBuild start: ".date('Y-m-d H:i:s')."\n\n";
+
 $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
@@ -68,3 +71,7 @@ if ($ipAddress == null) {
         'text'    => 'Please visit the following to view your instance: http://'.$ipAddress
     ]);
 }
+
+$end = time() - $start;
+
+echo "\nBuilt in ".$end." seconds\n\n";
