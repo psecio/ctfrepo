@@ -20,3 +20,9 @@ $container['db'] = function() {
     $dsn = 'mysql:dbname='.$_ENV['MYSQL_DATABASE'].';host='.$_ENV['MYSQL_HOST'];
     return new \PDO($dsn, $_ENV['MYSQL_USER'], $_ENV['MYSQL_PASSWORD']);
 };
+
+$container['session'] = function() {
+    $session_factory = new \Aura\Session\SessionFactory;
+    $session = $session_factory->newInstance($_COOKIE);
+    return $session->getSegment('default');
+};

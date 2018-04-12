@@ -27,6 +27,19 @@ class TemplateView extends \Slim\Views\Twig
             return $value1['id'] > $value2['id'];
         });
 
+        // see if we have a user
+        $user = $container->session->get('user');
+        if ($user !== null) {
+            $data['currentUser'] = $user;
+        }
+
+        // See if we have a flash message
+        $flash = $container->session->get('flash');
+        if ($flash !== null) {
+            $data['message'] = $flash;
+            $container->session->set('flash', null);
+        }
+
         return $this->render($response, $view, $data);
     }
 }
