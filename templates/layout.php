@@ -62,6 +62,9 @@
         {% if message is defined %}
         <div class="alert alert-warning">{{ message|raw }}</div>
         {% endif %}
+        {% if currentUser is defined %}
+        Logged in as <b>{{ currentUser.username }}</b> | <a href="/logout">Logout</a>
+        {% endif %}
         {% block content %}{% endblock %}
     </div><!-- /.container -->
   </body>
