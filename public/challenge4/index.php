@@ -72,7 +72,6 @@ $app->post('/', function($request, $response) {
     $password = $request->getParam('password');
 
     $user = getUser($this->db, $username);
-    print_r($user);
 
     if ($user === false || password_verify($password, $user['password']) == false) {
         $data['message'] = 'Invalid login information!';
@@ -151,7 +150,7 @@ $app->post('/add', function($request, $response) {
     if ($user !== null) {
         $data['message'] = 'Username must be unique';
         $data = array_merge($data, $input);
-        
+
         return $this->view->write('/challenge4/add.php', $data);
 
     } else {
