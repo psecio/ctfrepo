@@ -2,12 +2,8 @@
 
 {% block content %}
 
-{% if found is defined %}
-    {% if found == true %}
-        <div class="alert alert-success">Success! You found the flag!</div>
-    {% else %}
-        <div class="alert alert-danger">Invalid Login</div>
-    {% endif %}
+{% if found is defined and found == false%}
+    <div class="alert alert-danger">Invalid Login</div>
 {% endif %}
 
 <form action="/challenge2/user/login" method="POST">
