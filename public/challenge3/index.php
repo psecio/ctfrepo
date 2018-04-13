@@ -56,7 +56,7 @@ $app->post('/view/{id}', function($request, $response, $args) {
         $stmt = $this->db->prepare('insert into comments (post_id, contents, post_date) values (:postId, :contents, :date)');
         $stmt->execute([
             'postId' => $id,
-            'contents' => $comment,
+            'contents' => strip_tags($comment, '<img>'),
             'date' => date('Y-m-d H:i:s', time())
         ]);
     }
