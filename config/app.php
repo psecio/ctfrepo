@@ -12,6 +12,13 @@ $container = $app->getContainer();
 $container['view'] = function() use ($container) {
     $view = new TemplateView(__DIR__.'/../templates');
     $view['container'] = $container;
+    $env = $view->getEnvironment();
+
+    // Set up the "env" helper function
+    $function = new Twig_SimpleFunction('serialize', function($data) {
+        return serialize($data);
+    });
+    $env->addFunction($function);
 
     return $view;
 };
