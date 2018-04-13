@@ -16,6 +16,7 @@ $app->post('/user/login', function($request, $response, $args) {
     $password = $request->getParam('password');
 
     if ($username == 'admin' && $password == '3l33t') {
+        $data['flag'] = 'Success - you found the flag!';
         $data['found'] = true;
     }
 
