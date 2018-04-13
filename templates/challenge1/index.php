@@ -14,4 +14,6 @@
 
 {% endfor %}
 
+<!-- <a href="/admin">Go to Admin</a> -->
+
 {% endblock %}
