@@ -21,7 +21,7 @@ $app->get('/admin', function() {
         $cookie = base64_decode($_COOKIE['is_admin']);
 
         if (urldecode($cookie) == 'admin=1') {
-            $data['flag'] = "Success! You found the flag!";
+            $data['flag'] = 'Success! You found the flag at the "hidden" admin access point';
         }
     }
     
