@@ -7,6 +7,8 @@
 <p>
 {{ file.content }}
 </p>
+<br/>
+<a class="btn btn-success" href="/challenge6">Back to list</a>
 
 {% if recent is defined %}
 <br/><hr/>
