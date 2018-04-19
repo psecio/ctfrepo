@@ -37,6 +37,9 @@ $app->get('/', function() {
 
 $app->get('/view/{id}', function($request, $response, $args) {
     $fileId = $args['id'];
+    if ($fileId == 2) {
+        return $this->response->withRedirect('/challenge6/');
+    }
     $file = getFileById($this->db, $fileId);
     $data = [
         'file' => $file
