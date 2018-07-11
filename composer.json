@@ -11,6 +11,7 @@
         "php-http/curl-client": "^1.7",
         "guzzlehttp/psr7": "^1.4",
         "kriswallsmith/buzz": "0.10",
-        "aura/session": "^2.1"
+        "aura/session": "^2.1",
+        "psecio/jwt": "^1.7"
     }
 }
