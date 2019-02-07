@@ -8,42 +8,54 @@ $header = new \Psecio\Jwt\Header($key);
 $jwt = new \Psecio\Jwt\Jwt($header);
 
 // Middleware to verify the auth header is there and valid
-$verifyAuth = function($request, $response, $next) use ($jwt){
+$verifyAuth = function($request, $response, $next) use ($jwt, $app){
     $authHeader = $request->getHeader('Authorization');
+
     if (empty($authHeader)) {
-        return $response->withJson(['error' => 'Authorization header required']);
+        return $response->withJson(['error' => 'Authorization header required'], 400);
     }
 
-    // Split off the token and decode it
-    $parts = explode(' ', $authHeader[0]);
+    // Header looks like: Bearer <JWT token>
+    $headerParts = explode(' ', $authHeader[0]);
     try {
-        $token = $parts[1];
+        $token = $headerParts[1];
 
-        // Decode it insecurely
+        // Decode it insecurely, not caring about the signature
         $jwtParts = explode('.', $token);
-        // print_r($jwtParts);
-        
         $h = json_decode(base64_decode($jwtParts[0]));
         $b = json_decode(base64_decode($jwtParts[1]));
 
-        // Be sure they got the alg setting correct
-        if ($h->alg !== 'None') {
-            return $response->withJson(['error' => 'Invalid Authorization header']);
-        }
-        // Be sure they got it from our token
+        // If the algorithm is "None" they're trying the exploit
+        $decoded = ($h->alg == 'None') ? $b : $jwt->decode($token);
+
         $attr = get_object_vars($b);
 
         if ($attr['aud'] !== 'http://capturetf.com') {
-            return $response->withJson(['error' => 'Invalid Authorization header']);
+            return $response->withJson(['error' => 'Invalid Authorization header (Invalid audience)']);
         }
         if ($attr['iss'] !== 'http://capturetf.com') {
-            return $response->withJson(['error' => 'Invalid Authorization header']);
+            return $response->withJson(['error' => 'Invalid Authorization header (Invalid issuer)']);
         }
 
-        return $response->withJson(['message' => 'Success! You bypassed the JWT signing with alg:None']);
+        // Passed all the checks, get the user and put them in the session
+        $stmt = $this->db->prepare('select * from users where username=:username');
+        $stmt->execute(['username' => $decoded->username]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // If they're trying the exploit, override the user's actual role with what they provided
+        if ($h->alg == 'None' && count($jwtParts) < 3) {
+            if ($b->role !== $result['role']) {
+                return $response->withJson(['message' => 'You did it! Successful auth bypass!']);
+            }
+            $user['role'] = $b->role;
+        }
+
+        $session = $app->getContainer()->get('session');
+        $session->set('user', $result);
+
 
     } catch (\Exception $e) {
-        return $response->withJson(['error' => 'There was an authentication error: '.$e->getMessage()]);
+        return $response->withJson(['error' => 'Error: '.$e->getMessage()], 400);
     }
     
 
@@ -61,7 +73,7 @@ $app->post('/api/register', function($request, $response) {
     $params = $request->getParams();
 
     if (!isset($params['username']) || !isset($params['password']) || !isset($params['name'])) {
-        return $response->withJson(['error' => 'Invalid input, please try again']);
+        return $response->withJson(['error' => 'Invalid input - username, password and name required.']);
     }
 
     // Be sure the user doesn't already exist
@@ -93,8 +105,20 @@ $app->post('/api/register', function($request, $response) {
 });
 
 $app->get('/api/users', function($request, $response) {
-    $stmt = $this->db->prepare('select * from users');
-    $stmt->execute();
+    $session = $this->get('session');
+    $user = $session->get('user');
+
+    if ($user == null) {
+        return $response->withJson(['error' => 'There was an error']);
+    }
+    if ($user['role'] == 'admin') {
+        $stmt = $this->db->prepare('select * from users');
+        $stmt->execute();
+    } else {
+        $stmt = $this->db->prepare('select * from users where id = :id');
+        $stmt->execute(['id' => $user['id']]);
+    }
+    
     return $response->withJson($stmt->fetchAll(PDO::FETCH_ASSOC));
 })->add($verifyAuth);
 
@@ -125,7 +149,7 @@ $app->post('/api/login', function($request, $response) use ($jwt) {
         ->issuedAt(time())
         ->notBefore(time())
         ->expireTime(time()+3600);
-    $jwt->custom(['role' => 'user']);
+    $jwt->custom(['role' => 'user', 'username' => $params['username']]);
 
     $data = [
         'message' => 'Authorization successful',
@@ -135,14 +159,17 @@ $app->post('/api/login', function($request, $response) use ($jwt) {
     return $response->withJson($data);
 });
 
-$app->get('/generate', function($request, $response) use ($jwt) {
+$app->get('/api/generate', function($request, $response) use ($jwt) {
     $jwt
         ->issuer('http://capturetf.com')
         ->audience('http://capturetf.com')
         ->issuedAt(time())
         ->notBefore(time())
         ->expireTime(time()+3600);
-    $jwt->custom(['role' => 'admin']);
+    $jwt->custom([
+        'role' => 'admin',
+        'username' => 'admin'
+    ]);
 
     return $response->withJson(['token' => $jwt->encode()]);
 });
